@@ -555,6 +555,7 @@ function exportCSV(&$inventory) {
     header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
     header('Expires: 0');
 	
+    if(!empty($conf->global->INVENTORY_USE_COST_PRICE)) echo 'Prix de revient;';
 	echo 'Ref;Label;barcode;qty theorique;PMP;dernier PA;';
 	if(!empty($conf->global->INVENTORY_USE_MIN_PA_IF_NO_LAST_PA)) echo 'PA courant;';
 	echo 'qty réelle;PMP;dernier PA;';
@@ -609,6 +610,12 @@ function exportCSV(&$inventory) {
 			
 		}
 		
+        if(!empty($conf->global->INVENTORY_USE_COST_PRICE)) {
+            $row_cost_price = array(
+                'cp_stock' => $product->cost_price
+            );
+            $row = array_merge($row_cost_price, $row);
+        }
 		
 		echo '"'.implode('";"', $row).'"'."\r\n";
 		
